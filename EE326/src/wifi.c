@@ -80,6 +80,19 @@ void configure_usart_wifi(void) {
 	NVIC_EnableIRQ((IRQn_Type)BOARD_ID_USART);
 }
 
+void configure_wifi_comm_pin(void) {
+	pmc_enable_periph_clk(ID_PIOC);
+	pio_set_input(PIOC, PIN_WIFI_COMM_MASK,wifi_provision_handler PIO_PULLUP);
+	pio_set_debounce_filter(PIOC, PIN_WIFI_COMM_MASK, 10);
+}
+
+void configure_wifi_provision_pin(void) {
+	pmc_enable_periph_clk(ID_PIOC);
+	pio_set_input(PIOC, PIN_WIFI_PROVISION_MASK, PIO_IT_FALL_EDGE, wifi_provision_handler);
+	pio_enable_interrupt(PIOC, PIN_WIFI_PROVISION_MASK);
+	NVIC_EnableIRQ((IRQn_Type)ID_PIOC);
+}
+
 void configure_spi(void) {
 	pmc_enable_periph_clk(WIFI_SPI_ID); 
 	spi_disable(WIFI_SPI);
