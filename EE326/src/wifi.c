@@ -13,7 +13,7 @@ g_counts = 0;
 void wifi_usart_handler(void) {
 	uint32_t status = usart_get_status(BOARD_USART);
 	if(status & US_CSR_RXRDY) {
-		uint32_t received_byte ;
+		uint32_t received_byte;
 		usart_read(BOARD_USART, &received_byte);
 		process_incoming_byte_wifi((uint8_t)received_byte);
 	}
@@ -31,6 +31,21 @@ void wifi_command_resposne_handler(uint32_t ul_id, uint32_t ul_mask) {
 	g_wifi_command_complete = 1;
 }
 
+void process_data_wifi(void) {
+	if(g_wifi_buf_idx < WIFI_BUFFER_SIZE) {
+		g_wifi_buffer[g_wifi_buf_idx] = '\0';
+	} else {
+		g_wifi_buffer[WIFI_BUFFER_SIZE -1] = '\0'; 
+	}
+	if(strstr((char*) g_wifi_buffer, "SUCCESS")) {
+		g_wifi_command_complete = 1;
+	} else if (strstr((char*) g_wifi_buffer, "invalid command")) {
+		printf("Error: ESP32 received an invalid command \n");
+	}
+	g_wifi_buf_idx = 0;
+	memset((void*)g_wifi_buffer, 0, WIFI_BUFFER_SIZE);
+}
+
 void wifi_provision_handler(uint32_t ul_id, uint32_t ul_mask) {
 	unused(ul_id);
 	unused(ul_mask);
@@ -41,7 +56,7 @@ void wifi_spi_handler(void) {
 	uint32_t status = spi_read_status(WIFI_SPI);
 	
 	if (status & SPI_SR_RDRF) {
-		if g_spi_transfer_idx < g_image_len) {
+		if (g_spi_transfer_idx < g_image_len) {
 			spi_write(WIFI_SPI, g_image_buffer[g_spi_transfer_idx++], 0, 0);
 		} else {
 			spi_write(WIFI_SPI, 0x00, 0, 0); 
