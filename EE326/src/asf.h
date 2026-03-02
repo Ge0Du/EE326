@@ -59,9 +59,6 @@
 // From module: Common build items for user board support templates
 #include <user_board.h>
 
-// From module: Delay routines
-#include <delay.h>
-
 // From module: GPIO - General purpose Input/Output
 #include <gpio.h>
 
@@ -93,6 +90,15 @@
 
 // From module: System Clock Control - SAM4S implementation
 #include <sysclk.h>
+
+// From module: TWI - Two-Wire Interface - SAM implementation
+#include <sam_twi/twi_master.h>
+#include <sam_twi/twi_slave.h>
+#include <twi_master.h>
+#include <twi_slave.h>
+
+// From module: TWI - Two-wire Interface
+#include <twi.h>
 
 // From module: UART - Univ. Async Rec/Trans
 #include <uart.h>
