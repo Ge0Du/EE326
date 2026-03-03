@@ -3,14 +3,6 @@
 
 #include <asf.h>
 
-#define BOARD_ID_USART			ID_USART0
-#define BOARD_USART				USART0
-#define BOARD_USART_BAUDRATE	115200
-#define WIFI_SPI				SPI
-#define WIFI_SPI_ID				ID_SPI
-#define PIN_WIFI_COMM_MASK		PIO_PC21
-#define PIN_WIFI_PROVISION_MASK	PIO_PC22
-#define WIFI_BUFFER_SIZE		1024
 
 extern volatile uint8_t g_wifi_buffer[WIFI_BUFFER_SIZE];
 extern volatile uint32_t g_wifi_buf_idx;

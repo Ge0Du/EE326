@@ -2,6 +2,20 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\ASF\common\services\delay\sam\cycle_counter.c
+
+src\ASF\sam\drivers\pdc\pdc.c
+
+src\ASF\sam\drivers\rtc\rtc.c
+
+src\ASF\sam\drivers\tc\tc.c
+
+src\ov2640.c
+
+src\ov2640_table_registers.c
+
+src\timer_interface.c
+
 src\wifi.c
 
 src\ASF\common\boards\user_board\init.c

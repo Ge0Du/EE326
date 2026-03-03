@@ -1,5 +1,22 @@
+#include <sam4s8b.h>
+#include <asf.h>
+#include "pio.h"
+#include "pdc.h"
+#include "conf_board.h"
 #include "camera.h"
 #include "ov2640.h"
+
+#ifndef PIOC
+#define PIOC       ((Pio    *)0x400E1200U)
+#define ID_PIOC    (13U)
+#endif
+#ifndef PIOA
+#define PIOA       ((Pio    *)0x400E0E00U)
+#define ID_PIOA    (11U)
+#endif
+#ifndef PIO_TYPE_PIO_INPUT
+#define PIO_TYPE_PIO_INPUT 0
+#endif
 
 volatile uint32_t g_vsync_flag = 0;
 uint8_t g_image_buffer[CAM_IMAGE_BUFFER_SIZE]; 
@@ -68,14 +85,25 @@ void configure_camera(void){
 uint8_t start_capture(void) {
 	g_vsync_flag = 0;
 	
-	pio_capture_to_buffer(PIOC, g_image_buffer, CAM_IMAGE_BUFFER_SIZE);
-
+	Pdc *p_pio_pdc = (Pdc *)((uint32_t)PIOC + 0x100);
+	pdc_packet_t pdc_pio_packet;
+	
+	pdc_pio_packet.ul_addr = (uint32_t)g_image_buffer;
+	pdc_pio_packet.ul_size = CAM_IMAGE_BUFFER_SIZE; 
+	pdc_rx_init(p_pio_pdc, &pdc_pio_packet, NULL);
+	pdc_enable_transfer(p_pio_pdc, PERIPH_PTCR_RXTEN);
+		
 	uint32_t timeout = 0;
 	
 	//search for rising edge
 	while (g_vsync_flag == 0) {
-		if(timeout ++ > 1000000) return 0;
+		if(timeout ++ > 1000000) {
+			pdc_disable_transfer(p_pio_pdc, PERIPH_PTCR_RXTEN);
+			return 0;// timeout
+		}
 	}
+	
+	pdc_disable_transfer(p_pio_pdc, PERIPH_PTCR_RXTEN);
 	
 	if(find_image_len()) {
 		return 1; //correct transfer

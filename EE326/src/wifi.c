@@ -1,11 +1,30 @@
+#include <sam4s8b.h>
+#include <asf.h>
+#include "pio.h"
+#include "pmc.h"
 #include "wifi.h"
 #include "camera.h"
+#include "conf_board.h"
+#include <string.h>
+#ifndef PIOC
+#define PIOC       ((Pio    *)0x400E1200U)
+#define ID_PIOC    (13U)
+#endif
+#ifndef PIOA
+#define PIOA       ((Pio    *)0x400E0E00U)
+#define ID_PIOA    (11U)
+#endif
+#ifndef PIO_TYPE_PIO_INPUT
+#define PIO_TYPE_PIO_INPUT 0
+#endif
 
-g_wifi_buf_idx = 0;
-g_wifi_command_complete = 0;
-g_wifi_provision_flag = 0;
-g_spi_transfer_idx = 0;
-g_counts = 0;
+
+
+volatile uint32_t g_wifi_buf_idx = 0;
+volatile uint8_t g_wifi_command_complete = 0;
+volatile uint8_t g_wifi_provision_flag = 0;
+volatile uint32_t g_spi_transfer_idx = 0;
+volatile uint32_t g_counts = 0;
 
 void wifi_usart_handler(void) {
 	uint32_t status = usart_get_status(BOARD_USART);
@@ -89,7 +108,8 @@ void configure_wifi_comm_pin(void) {
 
 void configure_wifi_provision_pin(void) {
 	pmc_enable_periph_clk(ID_PIOC);
-	pio_set_input(PIOC, PIN_WIFI_PROVISION_MASK, PIO_IT_FALL_EDGE, wifi_provision_handler);
+	pio_set_input(PIOC, PIN_WIFI_PROVISION_MASK, PIO_PULLUP);
+	pio_handler_set(PIOC, ID_PIOC, PIN_WIFI_PROVISION_MASK, PIO_IT_FALL_EDGE, wifi_provision_handler);
 	pio_enable_interrupt(PIOC, PIN_WIFI_PROVISION_MASK);
 	NVIC_EnableIRQ((IRQn_Type)ID_PIOC);
 }
@@ -128,7 +148,7 @@ void write_image_to_web(void) {
 	sprintf(cmd, "image_transfer %u", (unsigned int)g_image_len);
 	write_wifi_command(cmd, 10);
 	
-	while(pio_get(PIOC, PIO_TYPE_PIO_INPUT, PIN_WIFI_COMM_MASK) == LOW);
+	while(pio_get(PIOC, PIO_TYPE_PIO_INPUT, PIN_WIFI_COMM_MASK) == 0);
 	g_wifi_command_complete = 0; 
 
 	Pdc *p_spi_pdc = spi_get_pdc_base(WIFI_SPI);

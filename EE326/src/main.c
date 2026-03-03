@@ -34,24 +34,32 @@
 #include "camera.h"
 #include "wifi.h"
 #include "timer_interface.h"
+uint8_t status = 0;
+volatile uint8_t g_wifi_buffer[];
 
-
-void write_wifi_command(char* comm, uint8_t cnt);
+void configure_status_pins(void);
 
 int main (void)
 {
 	/* Insert system clock initialization code here (sysclk_init()). */
+	status = 1;
 	sysclk_init();
 	board_init();
-	
+	status = 2;
+	configure_status_pins();
 	configure_tc();
+	status = 3;
 	configure_usart_wifi();
 	configure_spi();
+	status = 4;
 	configure_wifi_comm_pin();
 	configure_wifi_provision_pin();
+	status = 5;
 	
 	init_camera();
 	configure_camera();
+	
+	status = 6;
 	
 	//check comm to ESP
 	bool wifi_connected = false;
@@ -67,6 +75,8 @@ int main (void)
 			delay_ms(10000);
 		}
 	}
+	
+	status = 8;
 	
 	// main loop post connection 
 	while (1) {

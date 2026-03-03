@@ -40,6 +40,58 @@
 /** Enable Com Port. */
 #define CONF_BOARD_UART_CONSOLE
 
+//Clock Freq
+#define BOARD_FREQ_SLCK_XTAL      (32768U)
+#define BOARD_FREQ_SLCK_BYPASS    (32768U)
+#define BOARD_FREQ_MAINCK_XTAL    (12000000U)
+#define BOARD_FREQ_MAINCK_BYPASS  (12000000U)
+#define BOARD_OSC_STARTUP_US      (15625U)
+
+// WiFi USART Config
+#define BOARD_ID_USART			ID_USART0
+#define BOARD_USART				USART0
+#define BOARD_USART_BAUDRATE	115200 
+
+// WiFi SPI Config
+#define WIFI_SPI				SPI
+#define WIFI_SPI_ID				ID_SPI
+#define WIFI_BUFFER_SIZE		1024
+
+
+// WiFi-MCU Pins
+#define PIN_WIFI_RST			PIO_PA19_IDX
+#define PIN_WIFI_RST_FLAGS		(PIO_TYPE_PIO_OUTPUT_1 | PIO_DEFAULT)
+
+// WiFi Handshake Pins
+#define PIN_WIFI_COMM_IDX		PIO_PC16_IDX
+#define PIN_WIFI_COMM_MASK		(1u << 16)
+#define PIN_WIFI_COMM_FLAGS		(PIO_TYPE_PIO_INPUT | PIO_DEFAULT)
+
+// Provision Button
+#define PIN_WIFI_PROVISION_IDX	PIO_PC11_IDX
+#define PIN_WIFI_PROVISION_MASK	(1u << 11)
+
+//Webpage Status Pin
+#define PIN_NETWORK_STATUS		PIO_PA24_IDX
+#define PIN_CLIENT_STATUS		PIO_PA25_IDX
+
+// Camera Pin
+#define PIN_OV_RST				PIO_PA20_IDX
+#define PIN_OV_RST_FLAGS		(PIO_TYPE_PIO_OUTPUT_1 | PIO_DEFAULT)
+
+#define PIN_OV_XCLK				PIO_PA21_IDX
+#define PIN_OV_XCLK_FLAGS		(PIO_PERIPH_B | PIO_DEFAULT)
+
+#define PIN_OV_VSYNC			PIO_PA15_IDX
+#define PIN_OV_VSYNC_FLAGS		(PIO_TYPE_PIO_INPUT | PIO_DEFAULT)
+
+#define PIN_OV_DATA_BUS			(0xFF000000)
+#define PIN_OV_DATA_BUS_FLAGS	(PIO_INPUT | PIO_DEFAULT)
+
+//TWI
+#define BOARD_TWI				TWI0
+#define BOARD_ID_TWI			ID_TWI0
+
 //! [tc_define_peripheral]
 /* Use TC Peripheral 0. */
 #define TC             TC0
