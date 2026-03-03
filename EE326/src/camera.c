@@ -1,8 +1,9 @@
 #include "camera.h"
+#include "ov2640.h"
 
-g_vsync_flag = 0;
-g_image_buffer[CAM_IMAGE_BUFFER_SIZE]; 
-g_image_len = 0;
+volatile uint32_t g_vsync_flag = 0;
+uint8_t g_image_buffer[CAM_IMAGE_BUFFER_SIZE]; 
+volatile uint32_t g_image_len = 0;
 
 //VSYNC Interrupt Handler
 void vsync_handler(uint32_t ul_id, uint32_t ul_mask) {
@@ -27,7 +28,9 @@ void configure_twi(void) {
 
 void pio_capture_init(Pio *p_pio, uint32_t ul_id) {
 	pmc_enable_periph_clk(ul_id);
-	p_pio->PIO_PCMR = PIO_PCMR_PCEN | PIO_PCMR_DSIZE_BYTE;
+	p_pio->PIO_PCMR = PIO_PCMR_PCEN | PIO_PCMR_DSIZE_BYTE | PIO_PCMR_ALWYS;
+	
+	p_pio->PIO_PCIDR = 0xFFFFFFFF; 
 }
 
 void init_camera(void) {
@@ -37,6 +40,10 @@ void init_camera(void) {
 	
 	//8 bit data bus and vsync Config
 	gpio_configure_pin(PIN_OV_DATA_BUS, PIN_OV_DATA_BUS_FLAGS);
+	
+	init_vsync_interrupts();
+	
+	pio_capture_init(PIOC, ID_PIOC);
 	
 	//init xclk 
 	pmc_switch_pck_to_mainck(PMC_PCK_0, PMC_PCK_PRES_CLK_2);
@@ -61,10 +68,14 @@ void configure_camera(void){
 uint8_t start_capture(void) {
 	g_vsync_flag = 0;
 	
-	//search for rising edge
-	while (g_vsync_flag == 0);
-	
 	pio_capture_to_buffer(PIOC, g_image_buffer, CAM_IMAGE_BUFFER_SIZE);
+
+	uint32_t timeout = 0;
+	
+	//search for rising edge
+	while (g_vsync_flag == 0) {
+		if(timeout ++ > 1000000) return 0;
+	}
 	
 	if(find_image_len()) {
 		return 1; //correct transfer

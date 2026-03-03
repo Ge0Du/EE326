@@ -1,8 +1,5 @@
 #include "wifi.h"
 #include "camera.h"
-#include <string.h> 
-#include <stdio.h>
-
 
 g_wifi_buf_idx = 0;
 g_wifi_command_complete = 0;
@@ -56,6 +53,8 @@ void wifi_spi_handler(void) {
 	uint32_t status = spi_read_status(WIFI_SPI);
 	
 	if (status & SPI_SR_RDRF) {
+		uint16_t dummy;
+		spi_read(WIFI_SPI, &dummy, 0);
 		if (g_spi_transfer_idx < g_image_len) {
 			spi_write(WIFI_SPI, g_image_buffer[g_spi_transfer_idx++], 0, 0);
 		} else {
@@ -82,8 +81,10 @@ void configure_usart_wifi(void) {
 
 void configure_wifi_comm_pin(void) {
 	pmc_enable_periph_clk(ID_PIOC);
-	pio_set_input(PIOC, PIN_WIFI_COMM_MASK,wifi_provision_handler PIO_PULLUP);
-	pio_set_debounce_filter(PIOC, PIN_WIFI_COMM_MASK, 10);
+	pio_set_input(PIOC, PIN_WIFI_COMM_MASK, PIO_DEFAULT);
+	pio_handler_set(PIOC, ID_PIOC, PIN_WIFI_COMM_MASK, PIO_IT_RISE_EDGE, wifi_command_resposne_handler);
+	pio_enable_interrupt(PIOC, PIN_WIFI_COMM_MASK);
+	NVIC_EnableIRQ((IRQn_Type)ID_PIOC);
 }
 
 void configure_wifi_provision_pin(void) {
@@ -95,15 +96,12 @@ void configure_wifi_provision_pin(void) {
 
 void configure_spi(void) {
 	pmc_enable_periph_clk(WIFI_SPI_ID); 
+	pio_configure(PIOA, PIO_PERIPH_A, PIO_PA12A_MISO | PIO_PA13A_MOSI | PIO_PA14A_SPCK | PIO_PA11A_NPCS0, PIO_DEFAULT);
 	spi_disable(WIFI_SPI);
 	spi_reset(WIFI_SPI);
-	spi_set_lastxfer_disable(WIFI_SPI);
-	spi_set_peripheral_chip_select_value(WIFI_SPI, 0);
-	spi_set_fixed_peripheral_select(WIFI_SPI);
 	spi_set_slave_mode(WIFI_SPI);
 	spi_set_bits_per_transfer(WIFI_SPI, 0, SPI_CSR_BITS_8_BIT);
-	spi_enable_interrupt(WIFI_SPI, SPI_IER_RDRF);
-	NVIC_EnableIRQ((IRQn_Type)WIFI_SPI_ID); 
+	spi_disable_interrupt(WIFI_SPI, SPI_IER_RDRF);
 	spi_enable(WIFI_SPI);
 }
 
@@ -115,16 +113,31 @@ void write_wifi_command(char* comm, uint8_t cnt) {
 		while(!(BOARD_USART->US_CSR & US_CSR_TXRDY));
 		usart_write(BOARD_USART, *comm++);
 	}
+	while(!(BOARD_USART->US_CSR & US_CSR_TXRDY));
+	usart_write(BOARD_USART, '\r');
+	while(!(BOARD_USART->US_CSR & US_CSR_TXRDY));
+	usart_write(BOARD_USART, '\n');
+	
 	while(!g_wifi_command_complete && g_counts < cnt);
 }
 
 void write_image_to_web(void) {
 	if (g_image_len == 0) return;
-	g_spi_transfer_idx = 0;
-	spi_write(WIFI_SPI, g_image_buffer[g_spi_transfer_idx++], 0, 0);
 	
 	char cmd[64];
-	sprintf(cmd, "image_transfer %u\n", (unsigned int)g_image_len);
-	write_wifi_command(cmd, 5);
+	sprintf(cmd, "image_transfer %u", (unsigned int)g_image_len);
+	write_wifi_command(cmd, 10);
+	
+	while(pio_get(PIOC, PIO_TYPE_PIO_INPUT, PIN_WIFI_COMM_MASK) == LOW);
+	g_wifi_command_complete = 0; 
+
+	Pdc *p_spi_pdc = spi_get_pdc_base(WIFI_SPI);
+	pdc_packet_t pdc_spi_packet; 
+	pdc_spi_packet.ul_addr = (uint32_t)g_image_buffer;
+	pdc_spi_packet.ul_size = g_image_len;
+	
+	pdc_tx_init(p_spi_pdc, &pdc_spi_packet, NULL);
+	pdc_enable_transfer(p_spi_pdc, PERIPH_PTCR_TXTEN); 
 	while(!g_wifi_command_complete);
+	pdc_disable_transfer(p_spi_pdc, PERIPH_PTCR_TXTEN);
 }

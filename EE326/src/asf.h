@@ -59,6 +59,9 @@
 // From module: Common build items for user board support templates
 #include <user_board.h>
 
+// From module: Delay routines
+#include <delay.h>
+
 // From module: GPIO - General purpose Input/Output
 #include <gpio.h>
 
@@ -71,6 +74,9 @@
 // From module: Interrupt management - SAM implementation
 #include <interrupt.h>
 
+// From module: PDC - Peripheral DMA Controller Example
+#include <pdc.h>
+
 // From module: PIO - Parallel Input/Output Controller
 #include <pio.h>
 
@@ -81,6 +87,9 @@
 // From module: Part identification macros
 #include <parts.h>
 
+// From module: RTC - Real Time Clock
+#include <rtc.h>
+
 // From module: SPI - SAM Implementation
 #include <spi_master.h>
 #include <spi_master.h>
@@ -90,6 +99,9 @@
 
 // From module: System Clock Control - SAM4S implementation
 #include <sysclk.h>
+
+// From module: TC - Timer Counter
+#include <tc.h>
 
 // From module: TWI - Two-Wire Interface - SAM implementation
 #include <sam_twi/twi_master.h>
