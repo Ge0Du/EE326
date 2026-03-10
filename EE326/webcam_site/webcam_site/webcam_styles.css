@@ -1,0 +1,47 @@
+/* webcam_styles.css */
+
+/* two colors */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f0f0f0;  /* color 1 */
+  color: #222;                 /* color 2 */
+}
+
+/* two font sizes */
+h1 { font-size: 2em; }
+p, button { font-size: 1em; }
+
+.navbar {
+  background-color: #333;
+  padding: 8px;
+  margin-bottom: 20px;
+}
+
+.navbar a {
+  color: white;
+  margin-right: 15px;
+  text-decoration: none;
+  transition: color 0.2s; /* animation: color change on hover */
+}
+
+.navbar a:hover {
+  color: #aad4f5;
+}
+
+#webcamImage {
+  border: 1px solid #999;
+  display: block;
+  margin-bottom: 8px;
+}
+
+button {
+  padding: 8px 20px;
+  cursor: pointer;
+  /* animation: slight shrink on click */
+  transition: transform 0.1s;
+}
+
+button:active {
+  transform: scale(0.96);
+}

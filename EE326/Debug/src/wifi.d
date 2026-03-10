@@ -1,4 +1,14 @@
-src/wifi.d src/wifi.o: ../src/wifi.c \
+src/wifi.d src/wifi.o: ../src/wifi.c ../src/asf.h \
+ ../src/ASF/sam/utils/compiler.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stddef.h \
+ ../src/ASF/common/utils/parts.h \
+ ../src/ASF/sam/utils/preprocessor/preprocessor.h \
+ ../src/ASF/sam/utils/preprocessor/tpaste.h \
+ ../src/ASF/sam/utils/preprocessor/stringz.h \
+ ../src/ASF/sam/utils/preprocessor/mrepeat.h \
+ ../src/ASF/sam/utils/preprocessor/preprocessor.h \
+ ../src/ASF/sam/utils/header_files/io.h \
+ ../src/ASF/sam/utils/cmsis/sam4s/include/sam4s.h \
  ../src/ASF/sam/utils/cmsis/sam4s/include/sam4s8b.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdint.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdint.h \
@@ -66,18 +76,7 @@ src/wifi.d src/wifi.o: ../src/wifi.c \
  ../src/ASF/sam/utils/cmsis/sam4s/include/instance/instance_wdt.h \
  ../src/ASF/sam/utils/cmsis/sam4s/include/instance/instance_rtc.h \
  ../src/ASF/sam/utils/cmsis/sam4s/include/instance/instance_gpbr.h \
- ../src/ASF/sam/utils/cmsis/sam4s/include/pio/pio_sam4s8b.h ../src/asf.h \
- ../src/ASF/sam/utils/compiler.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stddef.h \
- ../src/ASF/common/utils/parts.h \
- ../src/ASF/sam/utils/preprocessor/preprocessor.h \
- ../src/ASF/sam/utils/preprocessor/tpaste.h \
- ../src/ASF/sam/utils/preprocessor/stringz.h \
- ../src/ASF/sam/utils/preprocessor/mrepeat.h \
- ../src/ASF/sam/utils/preprocessor/preprocessor.h \
- ../src/ASF/sam/utils/header_files/io.h \
- ../src/ASF/sam/utils/cmsis/sam4s/include/sam4s.h \
- ../src/ASF/sam/utils/cmsis/sam4s/include/sam4s8b.h \
+ ../src/ASF/sam/utils/cmsis/sam4s/include/pio/pio_sam4s8b.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdio.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_ansi.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\newlib.h \
@@ -143,6 +142,28 @@ src/wifi.d src/wifi.o: ../src/wifi.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\string.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\xlocale.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\string.h
+
+../src/asf.h:
+
+../src/ASF/sam/utils/compiler.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stddef.h:
+
+../src/ASF/common/utils/parts.h:
+
+../src/ASF/sam/utils/preprocessor/preprocessor.h:
+
+../src/ASF/sam/utils/preprocessor/tpaste.h:
+
+../src/ASF/sam/utils/preprocessor/stringz.h:
+
+../src/ASF/sam/utils/preprocessor/mrepeat.h:
+
+../src/ASF/sam/utils/preprocessor/preprocessor.h:
+
+../src/ASF/sam/utils/header_files/io.h:
+
+../src/ASF/sam/utils/cmsis/sam4s/include/sam4s.h:
 
 ../src/ASF/sam/utils/cmsis/sam4s/include/sam4s8b.h:
 
@@ -279,30 +300,6 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 ../src/ASF/sam/utils/cmsis/sam4s/include/instance/instance_gpbr.h:
 
 ../src/ASF/sam/utils/cmsis/sam4s/include/pio/pio_sam4s8b.h:
-
-../src/asf.h:
-
-../src/ASF/sam/utils/compiler.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stddef.h:
-
-../src/ASF/common/utils/parts.h:
-
-../src/ASF/sam/utils/preprocessor/preprocessor.h:
-
-../src/ASF/sam/utils/preprocessor/tpaste.h:
-
-../src/ASF/sam/utils/preprocessor/stringz.h:
-
-../src/ASF/sam/utils/preprocessor/mrepeat.h:
-
-../src/ASF/sam/utils/preprocessor/preprocessor.h:
-
-../src/ASF/sam/utils/header_files/io.h:
-
-../src/ASF/sam/utils/cmsis/sam4s/include/sam4s.h:
-
-../src/ASF/sam/utils/cmsis/sam4s/include/sam4s8b.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdio.h:
 

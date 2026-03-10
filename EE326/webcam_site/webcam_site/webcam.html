@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Webcam</title>
+  <link rel="stylesheet" href="webcam_styles.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html">Home</a>
+    <a href="webcam.html">Webcam</a>
+    <a href="info.html">Info</a>
+    <a href="/edit" target="_blank">File Editor</a>
+  </div>
+
+  <h1>Webcam</h1>
+  <hr>
+
+  <img id="webcamImage" src="" alt="webcam stream" width="640"><br>
+
+  <p>Time: <span id="clockDisplay">--</span></p>
+  <p>Last frame: <span id="timestamp">N/A</span></p>
+  <p>FPS: <span id="fpsDisplay">0</span></p>
+  <p>Status: <span id="statusText">Not connected</span></p>
+
+  <br>
+  <button id="streamToggle" onclick="toggleStream()">Start Stream</button>
+
+  <p><small>Note: may take a moment to stop after clicking Stop. This is normal.</small></p>
+
+  <script src="webcam_functions.js"></script>
+</body>
+</html>

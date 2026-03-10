@@ -1,0 +1,35 @@
+/* info_styles.css */
+
+/* two colors */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f0f0f0;  /* color 1 */
+  color: #222;                 /* color 2 */
+}
+
+/* two font sizes */
+h1, h2 { font-size: 1.8em; }
+p, li { font-size: 1em; }
+
+.navbar {
+  background-color: #333;
+  padding: 8px;
+  margin-bottom: 20px;
+}
+
+.navbar a {
+  color: white;
+  margin-right: 15px;
+  text-decoration: none;
+  transition: color 0.2s; /* animation */
+}
+
+.navbar a:hover {
+  color: #aad4f5;
+}
+
+img {
+  border: 1px solid #ccc;
+  margin: 8px 0;
+}
