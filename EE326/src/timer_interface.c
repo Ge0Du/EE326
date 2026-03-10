@@ -7,6 +7,8 @@
 
 #include "timer_interface.h"
 
+volatile uint32_t g_tc_div = 0;  // add at top with other globals
+
 void TC0_Handler(void)
 {
 	uint32_t ul_status;
@@ -34,6 +36,7 @@ void configure_tc(void)
 
 	// Configure TC for a 1Hz frequency and trigger on RC compare.
 	tc_find_mck_divisor(TC_FREQ, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);
+	    g_tc_div = ul_div;  // ? capture it right after this call
 	tc_init(TC0, 0, ul_tcclks | TC_CMR_CPCTRG);
 	tc_write_rc(TC0, 0, (ul_sysclk / ul_div) / TC_FREQ);
 

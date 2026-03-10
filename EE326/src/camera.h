@@ -2,25 +2,39 @@
 #define CAMERA_H_
 
 #include <asf.h>
+#include "tc.h"
 
-//COnfiguration
-#define BOARD_TWI	TWI0
-#define CAM_IMAGE_BUFFER_SIZE 40000
+#define BOARD_TWI               TWI0
+#define CAM_IMAGE_BUFFER_SIZE   100000
 
-//Global
-extern volatile uint32_t g_vsync_flag;
-extern volatile uint32_t g_image_len;
-extern uint8_t g_image_buffer[CAM_IMAGE_BUFFER_SIZE];
+typedef enum {
+    VSYNC_IDLE = 0,
+    VSYNC_FRAME_STARTED,
+    VSYNC_FRAME_DONE
+} vsync_state_t;
+typedef enum {
+	BUF_OWNER_NONE = 0,
+	BUF_OWNER_CAMERA,
+	BUF_OWNER_WIFI
+} buf_owner_t;
 
-//Functionalities
-void vsync_handler(uint32_t ul_id, uint32_t	 ul_mask);
-void init_vsync_interrupts(void);
-void configure_twi(void);
-void pio_capture_init(Pio *p_pio, uint32_t ul_id);
-uint8_t pio_capture_to_buffer(Pio *p_pio, uint8_t *uc_buf, uint32_t ul_size);
-void init_camera(void);
-void configure_camera(void);
+extern volatile buf_owner_t g_buf_owner;
+extern volatile vsync_state_t g_vsync_state;
+extern volatile uint32_t      g_image_len;
+extern uint8_t                g_image_buffer[CAM_IMAGE_BUFFER_SIZE];
+extern volatile uint8_t g_network_ready;
+extern volatile uint8_t g_clients_connected;
+extern volatile uint32_t g_t_vsync_wait;
+extern volatile uint32_t g_t_find_len;
+extern volatile uint32_t g_bytes_captured;
+extern volatile uint32_t g_t_capture_total;
+
+void    init_vsync_interrupts(void);
+void    configure_twi(void);
+void    pio_capture_init(Pio *p_pio, uint32_t ul_id);
+void    init_camera(void);
+void    configure_camera(void);
 uint8_t start_capture(void);
-uint8_t find_image_len(void);
+uint8_t find_image_len(uint32_t search_len);
 
-#endif 
+#endif

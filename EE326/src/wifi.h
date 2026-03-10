@@ -9,8 +9,10 @@ extern volatile uint32_t g_wifi_buf_idx;
 extern volatile uint8_t g_wifi_command_complete;
 extern volatile uint8_t g_wifi_provision_flag;
 extern volatile uint32_t g_spi_transfer_idx; 
-extern volatile uint32_t g_counts; 
+extern volatile uint8_t counts; 
+extern volatile uint32_t g_t_wifi_total;
 
+void USART0_Handler(void);
 void configure_usart_wifi(void);
 void configure_wifi_comm_pin(void);
 void configure_wifi_provision_pin(void);
